@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:12
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    env_file: "./postgres/.env.development"
+  graphql-engine:
+    build: "./hasura"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "postgres"
+    restart: always
+    env_file: "./hasura/.env.development"
+    # Include Hasura migrations and metadata every time `docker-compose up` is
+    # run.
+    # https://hasura.io/docs/1.0/graphql/core/migrations/advanced/auto-apply-migrations.html#applying-migrations
+    volumes:
+      - "./hasura/migrations:/hasura-migrations"
+      - "./hasura/metadata:/hasura-metadata"
+volumes:
+  db_data:

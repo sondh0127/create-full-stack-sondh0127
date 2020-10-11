@@ -1,0 +1,355 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/styles/default.min.css"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class=""><a href="readme.html">Readme</a></li>
+            <li class="active"><a href="development.html">Development</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div style="margin: 0 40px 40px 40px">
+      <p>🎉 <em>Create Full Stack has finished:</em></p>
+      <ul>
+        <li>
+          <em
+            >Scaffolding your monorepo with your platform and feature
+            selections</em
+          >
+        </li>
+        <li><em>Installing packages</em></li>
+        <li>
+          <em>Generating configuration instructions based on your selection</em>
+        </li>
+      </ul>
+      <p><strong>Follow the steps below to run locally.</strong></p>
+      <h2>1. Setup Docker</h2>
+      <p><em>Docker runs the Postgres DB.</em></p>
+      <ul>
+        <li>
+          Install Docker from their
+          <a href="https://docs.docker.com/get-docker/">website</a>
+        </li>
+        <li>Open the Docker app</li>
+      </ul>
+      <h2>2. Setup Expo</h2>
+      <p>
+        <em
+          >Expo simplifies mobile development by handling Auth redirects and
+          removing XCode and Android studio dependencies.</em
+        >
+      </p>
+      <p>If you’re new to Expo, register (it’s free) by running:</p>
+      <pre><code class="language-bash">yarn expo register
+</code></pre>
+      <p>OR login if you have an account</p>
+      <pre><code class="language-bash">yarn expo login
+</code></pre>
+      <h2>3. Signup for Auth0</h2>
+      <p>
+        <a href="https://auth0.com/signup">Signup</a> and create an Auth0
+        tenant. Change the default tenant name (ex. “development-my-full-stack”)
+        to make it readable. Auth0 is free for up to 7k users.
+      </p>
+      <p><strong>Save your tenant domain for steps below</strong></p>
+      <img
+        alt="Auth0 Signup"
+        src="https://create-full-stack.com/img/readme/auth0_signup.png"
+        width="512"
+      />
+      <h2>4. Create an Auth0 rule</h2>
+      <p>
+        <em
+          >This Auth0 rule adds the required
+          <a
+            href="https://hasura.io/docs/1.0/graphql/core/auth/authentication/jwt.html"
+            >custom JWT claims for Hasura auth</a
+          >.</em
+        >
+      </p>
+      <ul>
+        <li>Rules &gt; CREATE RULE</li>
+      </ul>
+      <img
+        alt="Auth0 Create Rule"
+        src="https://create-full-stack.com/img/readme/auth0_create_rule.png"
+        width="512"
+      />
+      <ul>
+        <li>Select the “Empty rule” template</li>
+      </ul>
+      <img
+        alt="Auth0 Rule Select"
+        src="https://create-full-stack.com/img/readme/auth0_rule_select.png"
+        width="512"
+      />
+      <ul>
+        <li>Name the rule (ex. “hasura custom JWT claims”)</li>
+        <li>Paste the code snippet below into the “Script” section</li>
+      </ul>
+      <pre><code class="language-js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hasuraAccessToken</span>(<span class="hljs-params">user, context, callback</span>) </span>{
+  <span class="hljs-keyword">const</span> namespace = <span class="hljs-string">&quot;https://hasura.io/jwt/claims&quot;</span>;
+  context.accessToken[namespace] = {
+    <span class="hljs-string">&quot;x-hasura-default-role&quot;</span>: <span class="hljs-string">&quot;user&quot;</span>,
+    <span class="hljs-string">&quot;x-hasura-allowed-roles&quot;</span>: [<span class="hljs-string">&quot;user&quot;</span>],
+    <span class="hljs-string">&quot;x-hasura-user-id&quot;</span>: user.user_id,
+  };
+  callback(<span class="hljs-literal">undefined</span>, user, context);
+}
+</code></pre>
+      <img
+        alt="Auth0 Rule"
+        src="https://create-full-stack.com/img/readme/auth0_rule.png"
+        width="512"
+      />
+      <h2>5. Create an Auth0 API</h2>
+      <p><em>This stores the auth configuration for the server.</em></p>
+      <ul>
+        <li>APIs &gt; CREATE API</li>
+      </ul>
+      <img
+        alt="Auth0 Create API"
+        src="https://create-full-stack.com/img/readme/auth0_create_api.png"
+        width="512"
+      />
+      <ul>
+        <li>Set the name (ex. “server”)</li>
+        <li>Set the identifier (audience) to “server”</li>
+      </ul>
+      <img
+        alt="Auth0 API Identifier"
+        src="https://create-full-stack.com/img/readme/auth0_api_identifier.png"
+        width="512"
+      />
+      <ul>
+        <li>Click “Settings”</li>
+        <li>Enable “Allow Offline Access”</li>
+      </ul>
+      <img
+        alt="Auth0 API Offline Access"
+        src="https://create-full-stack.com/img/readme/auth0_api_offline_access.png"
+        width="512"
+      />
+      <p>In <code>hasura/.env.development</code> fill in the field</p>
+      <img
+        alt="Auth0 API"
+        src="https://create-full-stack.com/img/readme/auth0_api_settings.png"
+        width="512"
+      />
+      <pre><code>HASURA_GRAPHQL_JWT_SECRET={&quot;jwk_url&quot;:&quot;https://[YOUR AUTH0 TENANT DOMAIN]/.well-known/jwks.json&quot;,&quot;audience&quot;:&quot;[YOUR AUTH0 API AUDIENCE]&quot;}
+</code></pre>
+      <p><strong>Save your API audience for steps below</strong></p>
+      <h2>6. Create an Auth0 “Single Page Application”</h2>
+      <p><em>This stores the auth configuration for web.</em></p>
+      <ul>
+        <li>Applications &gt; CREATE APPLICATION</li>
+      </ul>
+      <img
+        alt="Auth0 Create Application"
+        src="https://create-full-stack.com/img/readme/auth0_create_application.png"
+        width="512"
+      />
+      <ul>
+        <li>Set the name (ex. “web”)</li>
+        <li>Select “Single Page Web Applications”</li>
+      </ul>
+      <img
+        alt="Auth0 Single Page Web App"
+        src="https://create-full-stack.com/img/readme/auth0_spa.png"
+        width="512"
+      />
+      <ul>
+        <li>Click “Settings”</li>
+        <li>
+          Set “Allowed Callback URLs”, “Allowed Logout URLs”, and “Allowed Web
+          Origins” to “<a href="http://localhost:3000">http://localhost:3000</a
+          >”
+        </li>
+      </ul>
+      <img
+        alt="Auth0 Single Page Web App URLs"
+        src="https://create-full-stack.com/img/readme/auth0_spa_urls.png"
+        width="512"
+      />
+      <p>
+        In <code>packages/web/.env.development</code> fill in the fields from
+        the server API you created above and your Single Page Web Application’s
+        “Settings” page.
+      </p>
+      <img
+        alt="Auth0 Single Page Web App URLs"
+        src="https://create-full-stack.com/img/readme/auth0_spa_settings.png"
+        width="512"
+      />
+      <pre><code>REACT_APP_AUTH0_AUDIENCE=[YOUR AUTH0 API AUDIENCE]
+REACT_APP_AUTH0_DOMAIN=[YOUR AUTH0 TENANT DOMAIN]
+REACT_APP_AUTH0_CLIENT_ID=[YOUR AUTH0 SINGLE PAGE APPLICATION CLIENT ID]
+</code></pre>
+      <h2>7. Create an Auth0 “Native” Application</h2>
+      <p><em>This stores the auth configuration for mobile.</em></p>
+      <ul>
+        <li>Applications &gt; CREATE APPLICATION</li>
+      </ul>
+      <img
+        alt="Auth0 Create Application"
+        src="https://create-full-stack.com/img/readme/auth0_create_application.png"
+        width="512"
+      />
+      <ul>
+        <li>Set the name (ex. “mobile”)</li>
+        <li>Select “Native”</li>
+      </ul>
+      <img
+        alt="Auth0 Native"
+        src="https://create-full-stack.com/img/readme/auth0_native.png"
+        width="512"
+      />
+      <ul>
+        <li>Click “Settings”</li>
+        <li>
+          Set “Allowed Callback URLs” to “<a href="https://auth.expo.io/@"
+            >https://auth.expo.io/@</a
+          >[YOUR EXPO USERNAME]/[YOUR EXPO APP SLUG]”
+          <ul>
+            <li>Get YOUR EXPO USERNAME by running <code>expo whoami</code></li>
+            <li>
+              Get YOUR EXPO APP SLUG from
+              <a href="packages/mobile/app.json"
+                ><code>packages/mobile/app.json</code></a
+              >
+              <code>&quot;slug&quot;</code>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <img
+        alt="Auth0 Native Application URLs"
+        src="https://create-full-stack.com/img/readme/auth0_native_urls.png"
+        width="512"
+      />
+      <ul>
+        <li>Set “Refresh Token Behavior” to “Rotating”</li>
+      </ul>
+      <img
+        alt="Auth0 Native Refresh Token"
+        src="https://create-full-stack.com/img/readme/auth0_native_refresh_token.png"
+        width="512"
+      />
+      <p>
+        In <code>packages/mobile/.env.development</code> fill in the fields from
+        the server API you created above and your Native Application’s
+        “Settings” page.
+      </p>
+      <img
+        alt="Auth0 Native Application Settings"
+        src="https://create-full-stack.com/img/readme/auth0_native_settings.png"
+        width="512"
+      />
+      <pre><code>AUTH0_AUDIENCE=[YOUR AUTH0 API AUDIENCE]
+AUTH0_DOMAIN=[YOUR AUTH0 DOMAIN]
+AUTH0_CLIENT_ID=[YOUR AUTH0 NATIVE APPLICATION CLIENT ID]
+</code></pre>
+      <h2>8. Switch Universal Login to “New”</h2>
+      <p>
+        <em
+          >It’s recommended you use the “New Universal Login Experience” which
+          stores user credentials on page refresh. This is also helpful for
+          developing so you don’t need to re-authenticate to view changes you
+          make.</em
+        >
+      </p>
+      <ul>
+        <li>Navigate to “Universal Login”</li>
+        <li>Switch from “Classic” to “New”</li>
+      </ul>
+      <img
+        alt="Auth0 Universal Login"
+        src="https://create-full-stack.com/img/readme/auth0_universal_login.png"
+        width="512"
+      />
+      <h2>9. Start</h2>
+      <p>
+        🎉
+        <em
+          >Congrats! Your full stack is configured and ready for
+          development.</em
+        >
+      </p>
+      <p>From the root of the project run:</p>
+      <pre><code class="language-bash">yarn start
+</code></pre>
+      <p>URLs available:</p>
+      <ul>
+        <li>
+          web: <a href="http://localhost:3000">http://localhost:3000</a>
+          <ul>
+            <li>
+              <strong
+                >This redirects to your
+                <a href="https://auth0.com/docs/universal-login"
+                  >Auth0 login page</a
+                ></strong
+              >
+            </li>
+          </ul>
+        </li>
+        <li>
+          mobile (expo devtools):
+          <a href="http://localhost:19002">http://localhost:19002</a>
+        </li>
+        <li>
+          backend:
+          <a href="http://localhost:8080/v1/graphql"
+            >http://localhost:8080/v1/graphql</a
+          >
+          <ul>
+            <li><strong>API requires authorization to access</strong></li>
+          </ul>
+        </li>
+      </ul>
+      <h2>10. Access the Hasura console</h2>
+      <p>With the Hasura backend up, run:</p>
+      <pre><code class="language-bash"><span class="hljs-built_in">cd</span> hasura/
+yarn hasura console
+</code></pre>
+      <p>
+        <em
+          >Learn more about Hasura from their
+          <a href="https://hasura.io/docs/1.0/graphql/core/index.html">docs</a
+          >.</em
+        >
+      </p>
+      <h2>11. What’s next</h2>
+      <ul>
+        <li>
+          Follow the
+          <a href="https://create-full-stack.com/docs/tutorial_hasura"
+            >Hasura tutorial</a
+          >
+          to update your full stack
+        </li>
+        <li>
+          Check out
+          <a href="https://create-full-stack.com/docs/available_scripts"
+            >available scripts</a
+          >
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

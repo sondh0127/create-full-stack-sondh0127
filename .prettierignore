@@ -1,0 +1,5 @@
+build/
+.expo/
+
+# generated hasura metadata
+hasura/metadata

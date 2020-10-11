@@ -1,0 +1,38 @@
+# If changes are made to this file or other `.graphql` files, you must generate
+# the TS types and React hooks for the Apollo clients with `yarn generate`.
+
+query Todos {
+  todos {
+    id
+    name
+    complete
+  }
+}
+
+mutation CreateTodo($name: String!) {
+  insert_todos(objects: { name: $name }) {
+    returning {
+      id
+      name
+      complete
+    }
+  }
+}
+
+mutation UpdateTodo($id: Int!, $complete: Boolean!) {
+  update_todos(where: { id: { _eq: $id } }, _set: { complete: $complete }) {
+    returning {
+      id
+      name
+      complete
+    }
+  }
+}
+
+mutation DeleteTodo($id: Int!) {
+  delete_todos(where: { id: { _eq: $id } }) {
+    returning {
+      id
+    }
+  }
+}

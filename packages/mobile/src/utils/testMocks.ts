@@ -1,0 +1,18 @@
+export const navigation = {
+  navigate: jest.fn(),
+  dispatch: jest.fn(),
+  reset: jest.fn(),
+  goBack: jest.fn(),
+  isFocused: jest.fn(),
+  canGoBack: jest.fn(),
+  dangerouslyGetParent: jest.fn(),
+  dangerouslyGetState: jest.fn(),
+  setParams: jest.fn(),
+  setOptions: jest.fn(),
+  addListener: jest.fn(),
+  removeListener: jest.fn(),
+  jumpTo: jest.fn(),
+  openDrawer: jest.fn(),
+  closeDrawer: jest.fn(),
+  toggleDrawer: jest.fn(),
+};
