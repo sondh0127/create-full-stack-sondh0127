@@ -12,7 +12,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   /** The `Upload` scalar type represents a file upload. */
-  Upload: any;
+  Upload: File;
 };
 
 export type Auth0InfoResult = {
@@ -64,7 +64,12 @@ export type IntComparisonExp = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  single_upload: UploadedFileResult;
   sync_auth0_user: SyncAuth0UserResult;
+};
+
+export type MutationSingleUploadArgs = {
+  file: Scalars["Upload"];
 };
 
 export type MutationSyncAuth0UserArgs = {
@@ -74,6 +79,7 @@ export type MutationSyncAuth0UserArgs = {
 export type Query = {
   __typename?: "Query";
   auth0_info?: Maybe<Auth0InfoResult>;
+  uploads?: Maybe<Array<Maybe<UploadedFileResult>>>;
 };
 
 export type QueryAuth0InfoArgs = {
@@ -104,6 +110,14 @@ export type SyncAuth0UserResult = {
   affected_rows?: Maybe<Scalars["Int"]>;
 };
 
+export type UploadedFileResult = {
+  __typename?: "UploadedFileResult";
+  encoding: Scalars["String"];
+  filename: Scalars["String"];
+  mimetype: Scalars["String"];
+  url: Scalars["String"];
+};
+
 /** mutation root */
 export type MutationRoot = {
   __typename?: "mutation_root";
@@ -123,6 +137,7 @@ export type MutationRoot = {
   insert_users?: Maybe<UsersMutationResponse>;
   /** insert a single row into the table: "users" */
   insert_users_one?: Maybe<Users>;
+  single_upload: UploadedFileResult;
   sync_auth0_user: SyncAuth0UserResult;
   /** update data of the table: "todos" */
   update_todos?: Maybe<TodosMutationResponse>;
@@ -176,6 +191,11 @@ export type MutationRootInsertUsersArgs = {
 export type MutationRootInsertUsersOneArgs = {
   object: UsersInsertInput;
   on_conflict?: Maybe<UsersOnConflict>;
+};
+
+/** mutation root */
+export type MutationRootSingleUploadArgs = {
+  file: Scalars["Upload"];
 };
 
 /** mutation root */
@@ -237,6 +257,7 @@ export type QueryRoot = {
   todos_aggregate: TodosAggregate;
   /** fetch data from the table: "todos" using primary key columns */
   todos_by_pk?: Maybe<Todos>;
+  uploads?: Maybe<Array<Maybe<UploadedFileResult>>>;
   /** fetch data from the table: "users" */
   users: Array<Users>;
   /** fetch aggregated fields from the table: "users" */
@@ -940,6 +961,17 @@ export type DeleteTodoMutation = { __typename?: "mutation_root" } & {
   >;
 };
 
+export type SingleUploadMutationVariables = Exact<{
+  file: Scalars["Upload"];
+}>;
+
+export type SingleUploadMutation = { __typename?: "mutation_root" } & {
+  single_upload: { __typename?: "UploadedFileResult" } & Pick<
+    UploadedFileResult,
+    "filename" | "mimetype" | "encoding" | "url"
+  >;
+};
+
 export const TodosDocument = gql`
   query Todos {
     todos {
@@ -1147,4 +1179,57 @@ export type DeleteTodoMutationResult = Apollo.MutationResult<
 export type DeleteTodoMutationOptions = Apollo.BaseMutationOptions<
   DeleteTodoMutation,
   DeleteTodoMutationVariables
+>;
+export const SingleUploadDocument = gql`
+  mutation SingleUpload($file: Upload!) {
+    single_upload(file: $file) {
+      filename
+      mimetype
+      encoding
+      url
+    }
+  }
+`;
+export type SingleUploadMutationFn = Apollo.MutationFunction<
+  SingleUploadMutation,
+  SingleUploadMutationVariables
+>;
+
+/**
+ * __useSingleUploadMutation__
+ *
+ * To run a mutation, you first call `useSingleUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSingleUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [singleUploadMutation, { data, loading, error }] = useSingleUploadMutation({
+ *   variables: {
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useSingleUploadMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SingleUploadMutation,
+    SingleUploadMutationVariables
+  >
+) {
+  return Apollo.useMutation<
+    SingleUploadMutation,
+    SingleUploadMutationVariables
+  >(SingleUploadDocument, baseOptions);
+}
+export type SingleUploadMutationHookResult = ReturnType<
+  typeof useSingleUploadMutation
+>;
+export type SingleUploadMutationResult = Apollo.MutationResult<
+  SingleUploadMutation
+>;
+export type SingleUploadMutationOptions = Apollo.BaseMutationOptions<
+  SingleUploadMutation,
+  SingleUploadMutationVariables
 >;

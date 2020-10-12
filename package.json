@@ -20,7 +20,8 @@
     "hasura": "hasura --project hasura",
     "lint": "eslint packages/** --ext ts,tsx --fix",
     "prettier": "prettier --write .",
-    "start": "docker-compose up --no-start && concurrently -p \"[{name}]\" -c \"grey.bold\" -n \"Docker,Generate,Build Common,Serverless,Mobile,Web\" \"docker-compose up\" \"sleep 8 && yarn generate --watch\" \"yarn --cwd packages/common watch\" \"yarn --cwd packages/serverless start\" \"yarn --cwd packages/mobile start --non-interactive\" \"sleep 8 && BROWSER=none yarn --cwd packages/web start\"",
+    "start": "docker-compose up --no-start && concurrently -p \"[{name}]\" -c \"grey.bold\" -n \"Docker,Generate,Build Common,Serverless,Web\" \"docker-compose up\" \"sleep 8 && yarn generate --watch\" \"yarn --cwd packages/common watch\" \"yarn --cwd packages/serverless start\" \"sleep 8 && BROWSER=none yarn --cwd packages/web start\"",
+    "start-mobile": "docker-compose up --no-start && concurrently -p \"[{name}]\" -c \"grey.bold\" -n \"Docker,Generate,Build Common,Serverless,Mobile\" \"docker-compose up\" \"sleep 8 && yarn generate --watch\" \"yarn --cwd packages/common watch\" \"yarn --cwd packages/serverless start\" \"yarn --cwd packages/mobile start --non-interactive\"",
     "test": "concurrently -p \"[{name}]\" -c \"grey.bold\" -n \"Serverless,Mobile,Web\" \"yarn --cwd packages/serverless test --ci --watchAll=false\" \"yarn --cwd packages/mobile test --ci --watchAll=false\" \"yarn --cwd packages/web test --ci --watchAll=false\""
   },
   "husky": {
@@ -31,6 +32,9 @@
   "lint-staged": {
     "*.{js,ts,tsx,graphql,json,md,yaml,yml,html,css}": "prettier --write",
     "src/**.{ts,tsx}": "eslint --fix"
+  },
+  "resolutions": {
+    "graphql-upload": "^11.0.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.17.8",

@@ -20,11 +20,20 @@ export default gql`
     affected_rows: Int
   }
 
+  type UploadedFileResult {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+    url: String!
+  }
+
   type Query {
     auth0_info(auth0_id: String!): Auth0InfoResult
+    uploads: [UploadedFileResult]
   }
 
   type Mutation {
     sync_auth0_user(auth0_id: String!): SyncAuth0UserResult!
+    single_upload(file: Upload!): UploadedFileResult!
   }
 `;

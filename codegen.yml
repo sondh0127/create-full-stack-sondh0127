@@ -1,20 +1,29 @@
+overwrite: true
 hooks:
   afterOneFileWrite:
     - prettier --write
     - eslint --fix
 generates:
   packages/serverless/src/graphql/__generated__/index.ts:
-    schema: packages/serverless/src/graphql/schema.ts
+    schema:
+      - packages/serverless/src/graphql/schema.ts
+      - |
+        scalar Upload
     plugins:
       - typescript
       - typescript-resolvers
     config:
+      scalars:
+        DateTime: Date
+        JSON: "{ [key: string]: any }"
+        Upload: "Promise<{ filename: string; mimetype: string; encoding: string; createReadStream: Function; }>"
       useIndexSignature: true
       namingConvention:
         typeNames: pascal-case#pascalCase
         transformUnderscore: true
       # Use undefined instead of null when a field isn't set.
       maybeValue: T | undefined
+
   packages/common/src/graphql/__generated__/index.ts:
     schema:
       - "http://localhost:8080/v1/graphql":
@@ -26,6 +35,10 @@ generates:
       - typescript-operations
       - typescript-react-apollo
     config:
+      scalars:
+        Upload: File
+        DateTime: Date
+        JSON: "{ [key: string]: any }"
       namingConvention:
         typeNames: pascal-case#pascalCase
         transformUnderscore: true

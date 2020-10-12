@@ -1,3 +1,5 @@
+import AWS from "aws-sdk";
+
 import {
   getManagementAccessToken,
   getUserFromAuth0,
@@ -40,15 +42,39 @@ export default function getResolvers(): Resolvers {
       sync_auth0_user: async (_, args, context: Context) => {
         try {
           const response = await syncUserAuth0Action(args.auth0_id);
-          console.log(
-            `🇻🇳 [LOG]: defaultfunctiongetResolvers -> response`,
-            response
-          );
           return response;
         } catch (error) {
           const res = { affected_rows: 0 };
           return res;
         }
+      },
+      single_upload: async (_, { file }) => {
+        const { createReadStream, filename, mimetype, encoding } = await file;
+
+        // Create an upload stream that goes to S3
+        const fileStream = createReadStream();
+
+        const s3Bucket = new AWS.S3({
+          endpoint: process.env.MINIO_END_POINT,
+          accessKeyId: process.env.ACCESS_KEY_ID,
+          secretAccessKey: process.env.SECRET_ACCESS_KEY,
+          s3ForcePathStyle: true, // needed with minio?
+          signatureVersion: "v4",
+        });
+
+        const result = await s3Bucket
+          .upload({
+            Bucket: process.env.DESTINATION_BUCKET_NAME || "sondh0127",
+            Key: filename,
+            Body: fileStream,
+          })
+          .promise();
+
+        // Get the link representing the uploaded file
+        const url = result.Location;
+
+        // (optional) save it to our database
+        return { filename, mimetype, encoding, url };
       },
     },
   };

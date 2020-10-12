@@ -2,6 +2,7 @@ import { ApolloProvider } from "@apollo/client";
 import { useAuth0 } from "@auth0/auth0-react";
 import { makeStyles } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
+import { useSingleUploadMutation } from "common";
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -37,6 +38,7 @@ export default function App() {
             isDrawerOpen={isDrawerOpen}
             closeDrawer={() => setIsDrawerOpen(false)}
           />
+          <UploadFile />
           <Switch>
             <PrivateRoute exact path="/" component={Todos} />
             <Route path="/about" component={About} />
@@ -46,3 +48,34 @@ export default function App() {
     </ApolloProvider>
   );
 }
+
+const UploadFile = () => {
+  const [singleUpload, { loading, error }] = useSingleUploadMutation();
+  const a = "a";
+  const onChange = async ({
+    target: {
+      validity,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      files: [file],
+    },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      if (validity.valid && file) {
+        console.log(`🇻🇳 [LOG]: UploadFile -> file`, file);
+        await singleUpload({ variables: { file } });
+      }
+    } catch (error_) {
+      console.log(`🇻🇳 [LOG]: UploadFile -> _`, error_);
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{JSON.stringify(error, null, 2)}</div>;
+
+  return (
+    <>
+      <input type="file" required onChange={onChange} />
+    </>
+  );
+};

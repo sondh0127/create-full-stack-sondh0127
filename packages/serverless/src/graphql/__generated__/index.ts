@@ -1,4 +1,8 @@
-import { GraphQLResolveInfo } from "graphql";
+import {
+  GraphQLResolveInfo,
+  GraphQLScalarType,
+  GraphQLScalarTypeConfig,
+} from "graphql";
 export type Maybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
@@ -14,6 +18,12 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Upload: Promise<{
+    filename: string;
+    mimetype: string;
+    encoding: string;
+    createReadStream: Function;
+  }>;
 };
 
 export type Auth0InfoResult = {
@@ -37,9 +47,18 @@ export type SyncAuth0UserResult = {
   affected_rows?: Maybe<Scalars["Int"]>;
 };
 
+export type UploadedFileResult = {
+  __typename?: "UploadedFileResult";
+  filename: Scalars["String"];
+  mimetype: Scalars["String"];
+  encoding: Scalars["String"];
+  url: Scalars["String"];
+};
+
 export type Query = {
   __typename?: "Query";
   auth0_info?: Maybe<Auth0InfoResult>;
+  uploads?: Maybe<Array<Maybe<UploadedFileResult>>>;
 };
 
 export type QueryAuth0InfoArgs = {
@@ -49,10 +68,15 @@ export type QueryAuth0InfoArgs = {
 export type Mutation = {
   __typename?: "Mutation";
   sync_auth0_user: SyncAuth0UserResult;
+  single_upload: UploadedFileResult;
 };
 
 export type MutationSyncAuth0UserArgs = {
   auth0_id: Scalars["String"];
+};
+
+export type MutationSingleUploadArgs = {
+  file: Scalars["Upload"];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -174,25 +198,34 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  Upload: ResolverTypeWrapper<Scalars["Upload"]>;
   Auth0InfoResult: ResolverTypeWrapper<Auth0InfoResult>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   SyncAuth0UserResult: ResolverTypeWrapper<SyncAuth0UserResult>;
+  UploadedFileResult: ResolverTypeWrapper<UploadedFileResult>;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  Upload: Scalars["Upload"];
   Auth0InfoResult: Auth0InfoResult;
   String: Scalars["String"];
   Boolean: Scalars["Boolean"];
   Int: Scalars["Int"];
   SyncAuth0UserResult: SyncAuth0UserResult;
+  UploadedFileResult: UploadedFileResult;
   Query: {};
   Mutation: {};
 }>;
+
+export interface UploadScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes["Upload"], any> {
+  name: "Upload";
+}
 
 export type Auth0InfoResultResolvers<
   ContextType = any,
@@ -245,6 +278,17 @@ export type SyncAuth0UserResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type UploadedFileResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["UploadedFileResult"] = ResolversParentTypes["UploadedFileResult"]
+> = ResolversObject<{
+  filename?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  mimetype?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  encoding?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  url?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
@@ -254,6 +298,11 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryAuth0InfoArgs, "auth0_id">
+  >;
+  uploads?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes["UploadedFileResult"]>>>,
+    ParentType,
+    ContextType
   >;
 }>;
 
@@ -267,11 +316,19 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationSyncAuth0UserArgs, "auth0_id">
   >;
+  single_upload?: Resolver<
+    ResolversTypes["UploadedFileResult"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationSingleUploadArgs, "file">
+  >;
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
+  Upload?: GraphQLScalarType;
   Auth0InfoResult?: Auth0InfoResultResolvers<ContextType>;
   SyncAuth0UserResult?: SyncAuth0UserResultResolvers<ContextType>;
+  UploadedFileResult?: UploadedFileResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
 }>;

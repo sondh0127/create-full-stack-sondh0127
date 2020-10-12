@@ -13,7 +13,7 @@ interface Request {
   req: { user: DecodedJwt };
 }
 
-const origin = ["http://localhost:3000", "http://localhost:9695"];
+const origin = ["http://localhost:3000"];
 if (process.env.CORS_ORIGIN) {
   origin.push(process.env.CORS_ORIGIN);
 }
@@ -21,12 +21,12 @@ if (process.env.CORS_ORIGIN) {
 async function run() {
   const resolvers = getResolvers();
   const app = express();
-  // app.use(
-  //   cors({
-  //     origin,
-  //     credentials: true,
-  //   })
-  // );
+  app.use(
+    cors({
+      origin,
+      credentials: true,
+    })
+  );
 
   // app.use(
   //   jwt({
