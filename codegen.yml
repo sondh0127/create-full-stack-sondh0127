@@ -1,13 +1,25 @@
-schema:
-  - "http://localhost:8080/v1/graphql":
-      headers:
-        x-hasura-admin-secret: myadminsecretkey
 hooks:
   afterOneFileWrite:
     - prettier --write
     - eslint --fix
 generates:
+  packages/serverless/src/graphql/__generated__/index.ts:
+    schema: packages/serverless/src/graphql/schema.ts
+    plugins:
+      - typescript
+      - typescript-resolvers
+    config:
+      useIndexSignature: true
+      namingConvention:
+        typeNames: pascal-case#pascalCase
+        transformUnderscore: true
+      # Use undefined instead of null when a field isn't set.
+      maybeValue: T | undefined
   packages/common/src/graphql/__generated__/index.ts:
+    schema:
+      - "http://localhost:8080/v1/graphql":
+          headers:
+            x-hasura-admin-secret: myadminsecretkey
     documents: packages/common/src/graphql/*.graphql
     plugins:
       - typescript

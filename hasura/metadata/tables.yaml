@@ -1,12 +1,22 @@
 - table:
     schema: public
     name: todos
+  remote_relationships:
+  - definition:
+      remote_field:
+        auth0_info:
+          arguments:
+            auth0_id: $auth0_id
+      hasura_fields:
+      - auth0_id
+      remote_schema: auth0
+    name: auth0_user
   insert_permissions:
   - role: user
     permission:
       check: {}
       set:
-        uid: x-hasura-User-Id
+        auth0_id: x-hasura-User-Id
       columns:
       - complete
       - name
@@ -18,9 +28,9 @@
       - complete
       - id
       - name
-      - uid
+      - auth0_id
       filter:
-        uid:
+        auth0_id:
           _eq: X-Hasura-User-Id
   update_permissions:
   - role: user
@@ -29,12 +39,25 @@
       - complete
       - name
       filter:
-        uid:
+        auth0_id:
           _eq: X-Hasura-User-Id
       check: null
   delete_permissions:
   - role: user
     permission:
       filter:
-        uid:
+        auth0_id:
           _eq: X-Hasura-User-Id
+- table:
+    schema: public
+    name: users
+  remote_relationships:
+  - definition:
+      remote_field:
+        auth0_info:
+          arguments:
+            auth0_id: $auth0_id
+      hasura_fields:
+      - auth0_id
+      remote_schema: auth0
+    name: auth0_profile

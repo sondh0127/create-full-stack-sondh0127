@@ -11,6 +11,24 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
+};
+
+export type Auth0InfoResult = {
+  __typename?: "Auth0InfoResult";
+  created_at?: Maybe<Scalars["String"]>;
+  email?: Maybe<Scalars["String"]>;
+  email_verified?: Maybe<Scalars["Boolean"]>;
+  last_ip?: Maybe<Scalars["String"]>;
+  last_login?: Maybe<Scalars["String"]>;
+  locale?: Maybe<Scalars["String"]>;
+  logins_count?: Maybe<Scalars["Int"]>;
+  name?: Maybe<Scalars["String"]>;
+  nickname?: Maybe<Scalars["String"]>;
+  picture?: Maybe<Scalars["String"]>;
+  updated_at?: Maybe<Scalars["String"]>;
+  user_id?: Maybe<Scalars["String"]>;
 };
 
 /** expression to compare columns of type Boolean. All fields are combined with logical 'AND'. */
@@ -26,6 +44,11 @@ export type BooleanComparisonExp = {
   _nin?: Maybe<Array<Scalars["Boolean"]>>;
 };
 
+export enum CacheControlScope {
+  Private = "PRIVATE",
+  Public = "PUBLIC",
+}
+
 /** expression to compare columns of type Int. All fields are combined with logical 'AND'. */
 export type IntComparisonExp = {
   _eq?: Maybe<Scalars["Int"]>;
@@ -37,6 +60,24 @@ export type IntComparisonExp = {
   _lte?: Maybe<Scalars["Int"]>;
   _neq?: Maybe<Scalars["Int"]>;
   _nin?: Maybe<Array<Scalars["Int"]>>;
+};
+
+export type Mutation = {
+  __typename?: "Mutation";
+  sync_auth0_user: SyncAuth0UserResult;
+};
+
+export type MutationSyncAuth0UserArgs = {
+  auth0_id: Scalars["String"];
+};
+
+export type Query = {
+  __typename?: "Query";
+  auth0_info?: Maybe<Auth0InfoResult>;
+};
+
+export type QueryAuth0InfoArgs = {
+  auth0_id: Scalars["String"];
 };
 
 /** expression to compare columns of type String. All fields are combined with logical 'AND'. */
@@ -58,6 +99,11 @@ export type StringComparisonExp = {
   _similar?: Maybe<Scalars["String"]>;
 };
 
+export type SyncAuth0UserResult = {
+  __typename?: "SyncAuth0UserResult";
+  affected_rows?: Maybe<Scalars["Int"]>;
+};
+
 /** mutation root */
 export type MutationRoot = {
   __typename?: "mutation_root";
@@ -65,14 +111,27 @@ export type MutationRoot = {
   delete_todos?: Maybe<TodosMutationResponse>;
   /** delete single row from the table: "todos" */
   delete_todos_by_pk?: Maybe<Todos>;
+  /** delete data from the table: "users" */
+  delete_users?: Maybe<UsersMutationResponse>;
+  /** delete single row from the table: "users" */
+  delete_users_by_pk?: Maybe<Users>;
   /** insert data into the table: "todos" */
   insert_todos?: Maybe<TodosMutationResponse>;
   /** insert a single row into the table: "todos" */
   insert_todos_one?: Maybe<Todos>;
+  /** insert data into the table: "users" */
+  insert_users?: Maybe<UsersMutationResponse>;
+  /** insert a single row into the table: "users" */
+  insert_users_one?: Maybe<Users>;
+  sync_auth0_user: SyncAuth0UserResult;
   /** update data of the table: "todos" */
   update_todos?: Maybe<TodosMutationResponse>;
   /** update single row of the table: "todos" */
   update_todos_by_pk?: Maybe<Todos>;
+  /** update data of the table: "users" */
+  update_users?: Maybe<UsersMutationResponse>;
+  /** update single row of the table: "users" */
+  update_users_by_pk?: Maybe<Users>;
 };
 
 /** mutation root */
@@ -82,6 +141,16 @@ export type MutationRootDeleteTodosArgs = {
 
 /** mutation root */
 export type MutationRootDeleteTodosByPkArgs = {
+  id: Scalars["Int"];
+};
+
+/** mutation root */
+export type MutationRootDeleteUsersArgs = {
+  where: UsersBoolExp;
+};
+
+/** mutation root */
+export type MutationRootDeleteUsersByPkArgs = {
   id: Scalars["Int"];
 };
 
@@ -98,6 +167,23 @@ export type MutationRootInsertTodosOneArgs = {
 };
 
 /** mutation root */
+export type MutationRootInsertUsersArgs = {
+  objects: Array<UsersInsertInput>;
+  on_conflict?: Maybe<UsersOnConflict>;
+};
+
+/** mutation root */
+export type MutationRootInsertUsersOneArgs = {
+  object: UsersInsertInput;
+  on_conflict?: Maybe<UsersOnConflict>;
+};
+
+/** mutation root */
+export type MutationRootSyncAuth0UserArgs = {
+  auth0_id: Scalars["String"];
+};
+
+/** mutation root */
 export type MutationRootUpdateTodosArgs = {
   _inc?: Maybe<TodosIncInput>;
   _set?: Maybe<TodosSetInput>;
@@ -109,6 +195,20 @@ export type MutationRootUpdateTodosByPkArgs = {
   _inc?: Maybe<TodosIncInput>;
   _set?: Maybe<TodosSetInput>;
   pk_columns: TodosPkColumnsInput;
+};
+
+/** mutation root */
+export type MutationRootUpdateUsersArgs = {
+  _inc?: Maybe<UsersIncInput>;
+  _set?: Maybe<UsersSetInput>;
+  where: UsersBoolExp;
+};
+
+/** mutation root */
+export type MutationRootUpdateUsersByPkArgs = {
+  _inc?: Maybe<UsersIncInput>;
+  _set?: Maybe<UsersSetInput>;
+  pk_columns: UsersPkColumnsInput;
 };
 
 /** column ordering options */
@@ -130,12 +230,24 @@ export enum OrderBy {
 /** query root */
 export type QueryRoot = {
   __typename?: "query_root";
+  auth0_info?: Maybe<Auth0InfoResult>;
   /** fetch data from the table: "todos" */
   todos: Array<Todos>;
   /** fetch aggregated fields from the table: "todos" */
   todos_aggregate: TodosAggregate;
   /** fetch data from the table: "todos" using primary key columns */
   todos_by_pk?: Maybe<Todos>;
+  /** fetch data from the table: "users" */
+  users: Array<Users>;
+  /** fetch aggregated fields from the table: "users" */
+  users_aggregate: UsersAggregate;
+  /** fetch data from the table: "users" using primary key columns */
+  users_by_pk?: Maybe<Users>;
+};
+
+/** query root */
+export type QueryRootAuth0InfoArgs = {
+  auth0_id: Scalars["String"];
 };
 
 /** query root */
@@ -161,6 +273,29 @@ export type QueryRootTodosByPkArgs = {
   id: Scalars["Int"];
 };
 
+/** query root */
+export type QueryRootUsersArgs = {
+  distinct_on?: Maybe<Array<UsersSelectColumn>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<UsersOrderBy>>;
+  where?: Maybe<UsersBoolExp>;
+};
+
+/** query root */
+export type QueryRootUsersAggregateArgs = {
+  distinct_on?: Maybe<Array<UsersSelectColumn>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<UsersOrderBy>>;
+  where?: Maybe<UsersBoolExp>;
+};
+
+/** query root */
+export type QueryRootUsersByPkArgs = {
+  id: Scalars["Int"];
+};
+
 /** subscription root */
 export type SubscriptionRoot = {
   __typename?: "subscription_root";
@@ -170,6 +305,12 @@ export type SubscriptionRoot = {
   todos_aggregate: TodosAggregate;
   /** fetch data from the table: "todos" using primary key columns */
   todos_by_pk?: Maybe<Todos>;
+  /** fetch data from the table: "users" */
+  users: Array<Users>;
+  /** fetch aggregated fields from the table: "users" */
+  users_aggregate: UsersAggregate;
+  /** fetch data from the table: "users" using primary key columns */
+  users_by_pk?: Maybe<Users>;
 };
 
 /** subscription root */
@@ -192,6 +333,29 @@ export type SubscriptionRootTodosAggregateArgs = {
 
 /** subscription root */
 export type SubscriptionRootTodosByPkArgs = {
+  id: Scalars["Int"];
+};
+
+/** subscription root */
+export type SubscriptionRootUsersArgs = {
+  distinct_on?: Maybe<Array<UsersSelectColumn>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<UsersOrderBy>>;
+  where?: Maybe<UsersBoolExp>;
+};
+
+/** subscription root */
+export type SubscriptionRootUsersAggregateArgs = {
+  distinct_on?: Maybe<Array<UsersSelectColumn>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<UsersOrderBy>>;
+  where?: Maybe<UsersBoolExp>;
+};
+
+/** subscription root */
+export type SubscriptionRootUsersByPkArgs = {
   id: Scalars["Int"];
 };
 
@@ -466,6 +630,262 @@ export type TodosVarianceFields = {
 
 /** order by variance() on columns of table "todos" */
 export type TodosVarianceOrderBy = {
+  id?: Maybe<OrderBy>;
+};
+
+/** columns and relationships of "users" */
+export type Users = {
+  __typename?: "users";
+  auth0_id: Scalars["String"];
+  /** Remote relationship field */
+  auth0_profile?: Maybe<Auth0InfoResult>;
+  id: Scalars["Int"];
+};
+
+/** aggregated selection of "users" */
+export type UsersAggregate = {
+  __typename?: "users_aggregate";
+  aggregate?: Maybe<UsersAggregateFields>;
+  nodes: Array<Users>;
+};
+
+/** aggregate fields of "users" */
+export type UsersAggregateFields = {
+  __typename?: "users_aggregate_fields";
+  avg?: Maybe<UsersAvgFields>;
+  count?: Maybe<Scalars["Int"]>;
+  max?: Maybe<UsersMaxFields>;
+  min?: Maybe<UsersMinFields>;
+  stddev?: Maybe<UsersStddevFields>;
+  stddev_pop?: Maybe<UsersStddevPopFields>;
+  stddev_samp?: Maybe<UsersStddevSampFields>;
+  sum?: Maybe<UsersSumFields>;
+  var_pop?: Maybe<UsersVarPopFields>;
+  var_samp?: Maybe<UsersVarSampFields>;
+  variance?: Maybe<UsersVarianceFields>;
+};
+
+/** aggregate fields of "users" */
+export type UsersAggregateFieldsCountArgs = {
+  columns?: Maybe<Array<UsersSelectColumn>>;
+  distinct?: Maybe<Scalars["Boolean"]>;
+};
+
+/** order by aggregate values of table "users" */
+export type UsersAggregateOrderBy = {
+  avg?: Maybe<UsersAvgOrderBy>;
+  count?: Maybe<OrderBy>;
+  max?: Maybe<UsersMaxOrderBy>;
+  min?: Maybe<UsersMinOrderBy>;
+  stddev?: Maybe<UsersStddevOrderBy>;
+  stddev_pop?: Maybe<UsersStddevPopOrderBy>;
+  stddev_samp?: Maybe<UsersStddevSampOrderBy>;
+  sum?: Maybe<UsersSumOrderBy>;
+  var_pop?: Maybe<UsersVarPopOrderBy>;
+  var_samp?: Maybe<UsersVarSampOrderBy>;
+  variance?: Maybe<UsersVarianceOrderBy>;
+};
+
+/** input type for inserting array relation for remote table "users" */
+export type UsersArrRelInsertInput = {
+  data: Array<UsersInsertInput>;
+  on_conflict?: Maybe<UsersOnConflict>;
+};
+
+/** aggregate avg on columns */
+export type UsersAvgFields = {
+  __typename?: "users_avg_fields";
+  id?: Maybe<Scalars["Float"]>;
+};
+
+/** order by avg() on columns of table "users" */
+export type UsersAvgOrderBy = {
+  id?: Maybe<OrderBy>;
+};
+
+/** Boolean expression to filter rows from the table "users". All fields are combined with a logical 'AND'. */
+export type UsersBoolExp = {
+  _and?: Maybe<Array<Maybe<UsersBoolExp>>>;
+  _not?: Maybe<UsersBoolExp>;
+  _or?: Maybe<Array<Maybe<UsersBoolExp>>>;
+  auth0_id?: Maybe<StringComparisonExp>;
+  id?: Maybe<IntComparisonExp>;
+};
+
+/** unique or primary key constraints on table "users" */
+export enum UsersConstraint {
+  /** unique or primary key constraint */
+  UsersAuth0IdKey = "users_auth0_id_key",
+  /** unique or primary key constraint */
+  UsersPkey = "users_pkey",
+}
+
+/** input type for incrementing integer column in table "users" */
+export type UsersIncInput = {
+  id?: Maybe<Scalars["Int"]>;
+};
+
+/** input type for inserting data into table "users" */
+export type UsersInsertInput = {
+  auth0_id?: Maybe<Scalars["String"]>;
+  id?: Maybe<Scalars["Int"]>;
+};
+
+/** aggregate max on columns */
+export type UsersMaxFields = {
+  __typename?: "users_max_fields";
+  auth0_id?: Maybe<Scalars["String"]>;
+  id?: Maybe<Scalars["Int"]>;
+};
+
+/** order by max() on columns of table "users" */
+export type UsersMaxOrderBy = {
+  auth0_id?: Maybe<OrderBy>;
+  id?: Maybe<OrderBy>;
+};
+
+/** aggregate min on columns */
+export type UsersMinFields = {
+  __typename?: "users_min_fields";
+  auth0_id?: Maybe<Scalars["String"]>;
+  id?: Maybe<Scalars["Int"]>;
+};
+
+/** order by min() on columns of table "users" */
+export type UsersMinOrderBy = {
+  auth0_id?: Maybe<OrderBy>;
+  id?: Maybe<OrderBy>;
+};
+
+/** response of any mutation on the table "users" */
+export type UsersMutationResponse = {
+  __typename?: "users_mutation_response";
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"];
+  /** data of the affected rows by the mutation */
+  returning: Array<Users>;
+};
+
+/** input type for inserting object relation for remote table "users" */
+export type UsersObjRelInsertInput = {
+  data: UsersInsertInput;
+  on_conflict?: Maybe<UsersOnConflict>;
+};
+
+/** on conflict condition type for table "users" */
+export type UsersOnConflict = {
+  constraint: UsersConstraint;
+  update_columns: Array<UsersUpdateColumn>;
+  where?: Maybe<UsersBoolExp>;
+};
+
+/** ordering options when selecting data from "users" */
+export type UsersOrderBy = {
+  auth0_id?: Maybe<OrderBy>;
+  id?: Maybe<OrderBy>;
+};
+
+/** primary key columns input for table: "users" */
+export type UsersPkColumnsInput = {
+  id: Scalars["Int"];
+};
+
+/** select columns of table "users" */
+export enum UsersSelectColumn {
+  /** column name */
+  Auth0Id = "auth0_id",
+  /** column name */
+  Id = "id",
+}
+
+/** input type for updating data in table "users" */
+export type UsersSetInput = {
+  auth0_id?: Maybe<Scalars["String"]>;
+  id?: Maybe<Scalars["Int"]>;
+};
+
+/** aggregate stddev on columns */
+export type UsersStddevFields = {
+  __typename?: "users_stddev_fields";
+  id?: Maybe<Scalars["Float"]>;
+};
+
+/** order by stddev() on columns of table "users" */
+export type UsersStddevOrderBy = {
+  id?: Maybe<OrderBy>;
+};
+
+/** aggregate stddev_pop on columns */
+export type UsersStddevPopFields = {
+  __typename?: "users_stddev_pop_fields";
+  id?: Maybe<Scalars["Float"]>;
+};
+
+/** order by stddev_pop() on columns of table "users" */
+export type UsersStddevPopOrderBy = {
+  id?: Maybe<OrderBy>;
+};
+
+/** aggregate stddev_samp on columns */
+export type UsersStddevSampFields = {
+  __typename?: "users_stddev_samp_fields";
+  id?: Maybe<Scalars["Float"]>;
+};
+
+/** order by stddev_samp() on columns of table "users" */
+export type UsersStddevSampOrderBy = {
+  id?: Maybe<OrderBy>;
+};
+
+/** aggregate sum on columns */
+export type UsersSumFields = {
+  __typename?: "users_sum_fields";
+  id?: Maybe<Scalars["Int"]>;
+};
+
+/** order by sum() on columns of table "users" */
+export type UsersSumOrderBy = {
+  id?: Maybe<OrderBy>;
+};
+
+/** update columns of table "users" */
+export enum UsersUpdateColumn {
+  /** column name */
+  Auth0Id = "auth0_id",
+  /** column name */
+  Id = "id",
+}
+
+/** aggregate var_pop on columns */
+export type UsersVarPopFields = {
+  __typename?: "users_var_pop_fields";
+  id?: Maybe<Scalars["Float"]>;
+};
+
+/** order by var_pop() on columns of table "users" */
+export type UsersVarPopOrderBy = {
+  id?: Maybe<OrderBy>;
+};
+
+/** aggregate var_samp on columns */
+export type UsersVarSampFields = {
+  __typename?: "users_var_samp_fields";
+  id?: Maybe<Scalars["Float"]>;
+};
+
+/** order by var_samp() on columns of table "users" */
+export type UsersVarSampOrderBy = {
+  id?: Maybe<OrderBy>;
+};
+
+/** aggregate variance on columns */
+export type UsersVarianceFields = {
+  __typename?: "users_variance_fields";
+  id?: Maybe<Scalars["Float"]>;
+};
+
+/** order by variance() on columns of table "users" */
+export type UsersVarianceOrderBy = {
   id?: Maybe<OrderBy>;
 };
 

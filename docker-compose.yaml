@@ -22,5 +22,7 @@ services:
     volumes:
       - "./hasura/migrations:/hasura-migrations"
       - "./hasura/metadata:/hasura-metadata"
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
 volumes:
   db_data:

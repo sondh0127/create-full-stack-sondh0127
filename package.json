@@ -15,13 +15,13 @@
     ]
   },
   "scripts": {
-    "build": "yarn --cwd packages/common build && yarn --cwd packages/web build",
+    "build": "yarn --cwd packages/common build && yarn --cwd packages/serverless build && yarn --cwd packages/web build",
     "generate": "graphql-codegen",
     "hasura": "hasura --project hasura",
     "lint": "eslint packages/** --ext ts,tsx --fix",
     "prettier": "prettier --write .",
-    "start": "docker-compose up --no-start && concurrently -p \"[{name}]\" -c \"grey.bold\" -n \"Docker,Generate,Build Common,Mobile,Web\" \"docker-compose up\" \"sleep 8 && yarn generate --watch\" \"yarn --cwd packages/common watch\" \"yarn --cwd packages/mobile start --non-interactive\" \"sleep 8 && BROWSER=none yarn --cwd packages/web start\"",
-    "test": "concurrently -p \"[{name}]\" -c \"grey.bold\" -n \"Mobile,Web\" \"yarn --cwd packages/mobile test --ci --watchAll=false\" \"yarn --cwd packages/web test --ci --watchAll=false\""
+    "start": "docker-compose up --no-start && concurrently -p \"[{name}]\" -c \"grey.bold\" -n \"Docker,Generate,Build Common,Serverless,Mobile,Web\" \"docker-compose up\" \"sleep 8 && yarn generate --watch\" \"yarn --cwd packages/common watch\" \"yarn --cwd packages/serverless start\" \"yarn --cwd packages/mobile start --non-interactive\" \"sleep 8 && BROWSER=none yarn --cwd packages/web start\"",
+    "test": "concurrently -p \"[{name}]\" -c \"grey.bold\" -n \"Serverless,Mobile,Web\" \"yarn --cwd packages/serverless test --ci --watchAll=false\" \"yarn --cwd packages/mobile test --ci --watchAll=false\" \"yarn --cwd packages/web test --ci --watchAll=false\""
   },
   "husky": {
     "hooks": {
