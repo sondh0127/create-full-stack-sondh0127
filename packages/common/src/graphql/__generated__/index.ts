@@ -362,10 +362,12 @@ export type SubscriptionRootUsersByPkArgs = {
 /** columns and relationships of "todos" */
 export type Todos = {
   __typename?: "todos";
+  auth0_id?: Maybe<Scalars["String"]>;
+  /** Remote relationship field */
+  auth0_user?: Maybe<Auth0InfoResult>;
   complete: Scalars["Boolean"];
   id: Scalars["Int"];
   name: Scalars["String"];
-  uid?: Maybe<Scalars["String"]>;
 };
 
 /** aggregated selection of "todos" */
@@ -434,10 +436,10 @@ export type TodosBoolExp = {
   _and?: Maybe<Array<Maybe<TodosBoolExp>>>;
   _not?: Maybe<TodosBoolExp>;
   _or?: Maybe<Array<Maybe<TodosBoolExp>>>;
+  auth0_id?: Maybe<StringComparisonExp>;
   complete?: Maybe<BooleanComparisonExp>;
   id?: Maybe<IntComparisonExp>;
   name?: Maybe<StringComparisonExp>;
-  uid?: Maybe<StringComparisonExp>;
 };
 
 /** unique or primary key constraints on table "todos" */
@@ -453,40 +455,40 @@ export type TodosIncInput = {
 
 /** input type for inserting data into table "todos" */
 export type TodosInsertInput = {
+  auth0_id?: Maybe<Scalars["String"]>;
   complete?: Maybe<Scalars["Boolean"]>;
   id?: Maybe<Scalars["Int"]>;
   name?: Maybe<Scalars["String"]>;
-  uid?: Maybe<Scalars["String"]>;
 };
 
 /** aggregate max on columns */
 export type TodosMaxFields = {
   __typename?: "todos_max_fields";
+  auth0_id?: Maybe<Scalars["String"]>;
   id?: Maybe<Scalars["Int"]>;
   name?: Maybe<Scalars["String"]>;
-  uid?: Maybe<Scalars["String"]>;
 };
 
 /** order by max() on columns of table "todos" */
 export type TodosMaxOrderBy = {
+  auth0_id?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   name?: Maybe<OrderBy>;
-  uid?: Maybe<OrderBy>;
 };
 
 /** aggregate min on columns */
 export type TodosMinFields = {
   __typename?: "todos_min_fields";
+  auth0_id?: Maybe<Scalars["String"]>;
   id?: Maybe<Scalars["Int"]>;
   name?: Maybe<Scalars["String"]>;
-  uid?: Maybe<Scalars["String"]>;
 };
 
 /** order by min() on columns of table "todos" */
 export type TodosMinOrderBy = {
+  auth0_id?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   name?: Maybe<OrderBy>;
-  uid?: Maybe<OrderBy>;
 };
 
 /** response of any mutation on the table "todos" */
@@ -513,10 +515,10 @@ export type TodosOnConflict = {
 
 /** ordering options when selecting data from "todos" */
 export type TodosOrderBy = {
+  auth0_id?: Maybe<OrderBy>;
   complete?: Maybe<OrderBy>;
   id?: Maybe<OrderBy>;
   name?: Maybe<OrderBy>;
-  uid?: Maybe<OrderBy>;
 };
 
 /** primary key columns input for table: "todos" */
@@ -527,21 +529,21 @@ export type TodosPkColumnsInput = {
 /** select columns of table "todos" */
 export enum TodosSelectColumn {
   /** column name */
+  Auth0Id = "auth0_id",
+  /** column name */
   Complete = "complete",
   /** column name */
   Id = "id",
   /** column name */
   Name = "name",
-  /** column name */
-  Uid = "uid",
 }
 
 /** input type for updating data in table "todos" */
 export type TodosSetInput = {
+  auth0_id?: Maybe<Scalars["String"]>;
   complete?: Maybe<Scalars["Boolean"]>;
   id?: Maybe<Scalars["Int"]>;
   name?: Maybe<Scalars["String"]>;
-  uid?: Maybe<Scalars["String"]>;
 };
 
 /** aggregate stddev on columns */
@@ -591,13 +593,13 @@ export type TodosSumOrderBy = {
 /** update columns of table "todos" */
 export enum TodosUpdateColumn {
   /** column name */
+  Auth0Id = "auth0_id",
+  /** column name */
   Complete = "complete",
   /** column name */
   Id = "id",
   /** column name */
   Name = "name",
-  /** column name */
-  Uid = "uid",
 }
 
 /** aggregate var_pop on columns */
