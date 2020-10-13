@@ -12,7 +12,9 @@ import Sidebar from './components/Sidebar'
 import SlashScreen from './components/SplashScreen'
 import About from './containers/About'
 import Todos from './containers/Todos'
-import getApolloClient from './utils/getApolloClient'
+import getApolloClient, {
+  getServerlessApolloClient,
+} from './utils/getApolloClient'
 
 const useStyles = makeStyles({
   root: {
@@ -48,8 +50,7 @@ export default function App() {
   )
 }
 
-const AppProvider: React.FC = props => {
-  const {children} = props
+const AppProvider: React.FC = ({children}) => {
   const {getAccessTokenSilently, isLoading, error} = useAuth0()
 
   const client = getApolloClient(getAccessTokenSilently)
@@ -66,7 +67,10 @@ const AppProvider: React.FC = props => {
 }
 
 const UploadFile = () => {
-  const [singleUpload, {loading, error}] = useSingleUploadMutation()
+  const {getAccessTokenSilently} = useAuth0()
+  const client = getServerlessApolloClient(getAccessTokenSilently)
+
+  const [singleUpload, {loading, error}] = useSingleUploadMutation({client})
   const onChange = async ({
     target: {
       validity,
