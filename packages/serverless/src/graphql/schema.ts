@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express";
+import {gql} from 'apollo-server-express'
 
 export default gql`
   type Auth0InfoResult {
@@ -36,4 +36,4 @@ export default gql`
     sync_auth0_user(auth0_id: String!): SyncAuth0UserResult!
     single_upload(file: Upload!): UploadedFileResult!
   }
-`;
+`

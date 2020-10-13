@@ -1,6 +1,7 @@
 # Hasura
 
-[Hasura](https://hasura.io/) is an open source engine that connects to your databases & microservices and auto-generates a production-ready GraphQL backend.
+[Hasura](https://hasura.io/) is an open source engine that connects to your
+databases & microservices and auto-generates a production-ready GraphQL backend.
 
 ## Run
 
@@ -10,17 +11,21 @@ docker-compose up
 
 ## Console
 
-Run a web server to serve the Hasura console for the GraphQL engine to manage the database and build queries.
+Run a web server to serve the Hasura console for the GraphQL engine to manage
+the database and build queries.
 
 ```bash
 yarn hasura console
 ```
 
-Accessing the console via http://localhost:9695/ automatically adds database migration and metadata files on changes ([docs](https://hasura.io/docs/1.0/graphql/manual/migrations/index.html#how-is-hasura-state-managed)).
+Accessing the console via http://localhost:9695/ automatically adds database
+migration and metadata files on changes
+([docs](https://hasura.io/docs/1.0/graphql/manual/migrations/index.html#how-is-hasura-state-managed)).
 
 ## Rebuilding
 
-Changes to environment variables, `.env.development`, requires rebuilding the docker image.
+Changes to environment variables, `.env.development`, requires rebuilding the
+docker image.
 
 ```bash
 docker-compose up --build

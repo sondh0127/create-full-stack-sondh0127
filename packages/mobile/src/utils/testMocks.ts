@@ -15,4 +15,4 @@ export const navigation = {
   openDrawer: jest.fn(),
   closeDrawer: jest.fn(),
   toggleDrawer: jest.fn(),
-};
+}

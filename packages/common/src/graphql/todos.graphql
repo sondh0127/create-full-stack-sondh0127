@@ -10,7 +10,7 @@ query Todos {
 }
 
 mutation CreateTodo($name: String!) {
-  insert_todos(objects: { name: $name }) {
+  insert_todos(objects: {name: $name}) {
     returning {
       id
       name
@@ -20,7 +20,7 @@ mutation CreateTodo($name: String!) {
 }
 
 mutation UpdateTodo($id: Int!, $complete: Boolean!) {
-  update_todos(where: { id: { _eq: $id } }, _set: { complete: $complete }) {
+  update_todos(where: {id: {_eq: $id}}, _set: {complete: $complete}) {
     returning {
       id
       name
@@ -30,7 +30,7 @@ mutation UpdateTodo($id: Int!, $complete: Boolean!) {
 }
 
 mutation DeleteTodo($id: Int!) {
-  delete_todos(where: { id: { _eq: $id } }) {
+  delete_todos(where: {id: {_eq: $id}}) {
     returning {
       id
     }

@@ -15,8 +15,10 @@ generates:
     config:
       scalars:
         DateTime: Date
-        JSON: "{ [key: string]: any }"
-        Upload: "Promise<{ filename: string; mimetype: string; encoding: string; createReadStream: Function; }>"
+        JSON: '{ [key: string]: any }'
+        Upload:
+          'Promise<{ filename: string; mimetype: string; encoding: string;
+          createReadStream: Function; }>'
       useIndexSignature: true
       namingConvention:
         typeNames: pascal-case#pascalCase
@@ -26,7 +28,7 @@ generates:
 
   packages/common/src/graphql/__generated__/index.ts:
     schema:
-      - "http://localhost:8080/v1/graphql":
+      - 'http://localhost:8080/v1/graphql':
           headers:
             x-hasura-admin-secret: myadminsecretkey
     documents: packages/common/src/graphql/*.graphql
@@ -38,7 +40,7 @@ generates:
       scalars:
         Upload: File
         DateTime: Date
-        JSON: "{ [key: string]: any }"
+        JSON: '{ [key: string]: any }'
       namingConvention:
         typeNames: pascal-case#pascalCase
         transformUnderscore: true

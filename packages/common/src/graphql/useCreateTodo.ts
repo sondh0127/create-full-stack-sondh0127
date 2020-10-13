@@ -3,22 +3,22 @@ import {
   TodosQuery,
   TodosQueryVariables,
   useCreateTodoMutation,
-} from "./__generated__";
+} from './__generated__'
 
 export default () =>
   useCreateTodoMutation({
-    update: (cache, { data }) => {
+    update: (cache, {data}) => {
       if (!data || !data.insert_todos) {
-        return;
+        return
       }
-      const createTodo = data.insert_todos.returning;
+      const createTodo = data.insert_todos.returning
       const query = cache.readQuery<TodosQuery, TodosQueryVariables>({
         query: TodosDocument,
-      });
-      const todos = query?.todos || [];
+      })
+      const todos = query?.todos || []
       cache.writeQuery<TodosQuery, TodosQueryVariables>({
         query: TodosDocument,
-        data: { todos: todos.concat(createTodo) },
-      });
+        data: {todos: todos.concat(createTodo)},
+      })
     },
-  });
+  })

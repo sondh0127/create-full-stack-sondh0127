@@ -1,15 +1,15 @@
-import { IconButton, InputAdornment, TextField } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import { useCreateTodo } from "common";
-import React, { useState } from "react";
+import {IconButton, InputAdornment, TextField} from '@material-ui/core'
+import AddIcon from '@material-ui/icons/Add'
+import {useCreateTodo} from 'common'
+import React, {useState} from 'react'
 
 export default function CreateTodo() {
-  const [name, setName] = useState("");
-  const [createTodo, { loading }] = useCreateTodo();
+  const [name, setName] = useState('')
+  const [createTodo, {loading}] = useCreateTodo()
 
   function onSubmit() {
-    createTodo({ variables: { name } });
-    setName("");
+    createTodo({variables: {name}})
+    setName('')
   }
 
   return (
@@ -20,10 +20,10 @@ export default function CreateTodo() {
       fullWidth
       variant="outlined"
       value={name}
-      onChange={(event) => setName(event.target.value)}
-      onKeyPress={async (event) => {
-        if (event.key === "Enter") {
-          onSubmit();
+      onChange={event => setName(event.target.value)}
+      onKeyPress={async event => {
+        if (event.key === 'Enter') {
+          onSubmit()
         }
       }}
       disabled={loading}
@@ -37,5 +37,5 @@ export default function CreateTodo() {
         ),
       }}
     />
-  );
+  )
 }

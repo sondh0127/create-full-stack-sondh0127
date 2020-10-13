@@ -1,18 +1,18 @@
-import { Button, makeStyles } from "@material-ui/core";
-import React from "react";
+import {Button, makeStyles} from '@material-ui/core'
+import React from 'react'
 
 const useStyles = makeStyles({
   root: {
     flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-});
+})
 
 export default function About() {
-  const classes = useStyles();
+  const classes = useStyles()
   return (
     <div className={classes.root}>
       <Button
@@ -24,5 +24,5 @@ export default function About() {
         GO TO GITHUB
       </Button>
     </div>
-  );
+  )
 }

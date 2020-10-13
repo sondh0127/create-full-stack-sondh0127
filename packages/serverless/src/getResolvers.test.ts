@@ -1,30 +1,30 @@
-import { ApolloServer } from "apollo-server-express";
-import { createTestClient } from "apollo-server-testing";
+import {ApolloServer} from 'apollo-server-express'
+import {createTestClient} from 'apollo-server-testing'
 import {
   CreateTodoDocument,
   DeleteTodoDocument,
   TodosDocument,
   UpdateTodoDocument,
-} from "common";
+} from 'common'
 
-import getResolvers from "./getResolvers";
-import typeDefs from "./graphql/schema";
+import getResolvers from './getResolvers'
+import typeDefs from './graphql/schema'
 
-let server: ApolloServer;
+let server: ApolloServer
 
 beforeEach(async () => {
-  const resolvers = getResolvers();
+  const resolvers = getResolvers()
   server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: () => ({ user: { sub: "1" } }),
-  });
-});
+    context: () => ({user: {sub: '1'}}),
+  })
+})
 
-afterEach(() => {});
+afterEach(() => {})
 
-it("fetch User", async () => {
+it('fetch User', async () => {
   // const { query } = createTestClient(server);
   // const result = await query({ query: TodosDocument });
   // expect(result).toMatchSnapshot();
-});
+})

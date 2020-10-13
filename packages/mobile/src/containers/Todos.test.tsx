@@ -1,18 +1,18 @@
-import { MockedProvider } from "@apollo/client/testing";
-import { fireEvent, render } from "@testing-library/react-native";
+import {MockedProvider} from '@apollo/client/testing'
+import {fireEvent, render} from '@testing-library/react-native'
 import {
   CreateTodoDocument,
   DeleteTodoDocument,
   TodosDocument,
   UpdateTodoDocument,
-} from "common";
-import React from "react";
-import { act } from "react-test-renderer";
+} from 'common'
+import React from 'react'
+import {act} from 'react-test-renderer'
 
-import { navigation } from "../utils/testMocks";
-import Todos from "./Todos";
+import {navigation} from '../utils/testMocks'
+import Todos from './Todos'
 
-it("renders an input", () => {
+it('renders an input', () => {
   const mocks = [
     {
       request: {
@@ -24,18 +24,18 @@ it("renders an input", () => {
         },
       },
     },
-  ];
-  const { getByPlaceholderText } = render(
+  ]
+  const {getByPlaceholderText} = render(
     <MockedProvider mocks={mocks}>
       <Todos navigation={navigation} />
-    </MockedProvider>
-  );
+    </MockedProvider>,
+  )
 
-  expect(getByPlaceholderText("What needs to be done?")).toBeTruthy();
-});
+  expect(getByPlaceholderText('What needs to be done?')).toBeTruthy()
+})
 
-it("renders a todo", async () => {
-  const name = "This test";
+it('renders a todo', async () => {
+  const name = 'This test'
   const mocks = [
     {
       request: {
@@ -43,23 +43,23 @@ it("renders a todo", async () => {
       },
       result: {
         data: {
-          todos: [{ __typename: "todos", id: 1, name, complete: false }],
+          todos: [{__typename: 'todos', id: 1, name, complete: false}],
         },
       },
     },
-  ];
-  const { findByText } = render(
+  ]
+  const {findByText} = render(
     <MockedProvider mocks={mocks}>
       <Todos navigation={navigation} />
-    </MockedProvider>
-  );
+    </MockedProvider>,
+  )
 
-  const todo = await findByText(name);
-  expect(todo).toBeTruthy();
-});
+  const todo = await findByText(name)
+  expect(todo).toBeTruthy()
+})
 
-it("creates a todo", async () => {
-  const name = "This test";
+it('creates a todo', async () => {
+  const name = 'This test'
   const mocks = [
     {
       request: {
@@ -74,17 +74,17 @@ it("creates a todo", async () => {
     {
       request: {
         query: CreateTodoDocument,
-        variables: { name },
+        variables: {name},
       },
       result: {
         data: {
           insert_todos: {
-            returning: { __typename: "todos", id: 1, name, complete: false },
+            returning: {__typename: 'todos', id: 1, name, complete: false},
           },
         },
       },
     },
-  ];
+  ]
   const {
     queryByText,
     getByText,
@@ -93,27 +93,27 @@ it("creates a todo", async () => {
   } = render(
     <MockedProvider mocks={mocks}>
       <Todos navigation={navigation} />
-    </MockedProvider>
-  );
-  expect(queryByText(name)).toBeNull();
+    </MockedProvider>,
+  )
+  expect(queryByText(name)).toBeNull()
 
-  const input = await findByPlaceholderText("What needs to be done?");
-  const submitButton = getByA11yLabel(/submit/i);
-  expect(input).toBeTruthy();
-  expect(submitButton).toBeTruthy();
-  fireEvent.changeText(input, name);
-  expect(input?.props.value).toBe(name);
+  const input = await findByPlaceholderText('What needs to be done?')
+  const submitButton = getByA11yLabel(/submit/i)
+  expect(input).toBeTruthy()
+  expect(submitButton).toBeTruthy()
+  fireEvent.changeText(input, name)
+  expect(input?.props.value).toBe(name)
 
   await act(async () => {
-    fireEvent.press(submitButton);
-  });
-  const todo = getByText(name);
-  expect(input?.props.value).toBe("");
-  expect(todo).toBeTruthy();
-});
+    fireEvent.press(submitButton)
+  })
+  const todo = getByText(name)
+  expect(input?.props.value).toBe('')
+  expect(todo).toBeTruthy()
+})
 
-it("updates a todo", async () => {
-  const name = "This test";
+it('updates a todo', async () => {
+  const name = 'This test'
   const mocks = [
     {
       request: {
@@ -121,41 +121,41 @@ it("updates a todo", async () => {
       },
       result: {
         data: {
-          todos: [{ __typename: "todos", id: 1, name, complete: false }],
+          todos: [{__typename: 'todos', id: 1, name, complete: false}],
         },
       },
     },
     {
       request: {
         query: UpdateTodoDocument,
-        variables: { id: 1, complete: true },
+        variables: {id: 1, complete: true},
       },
       result: {
         data: {
           update_todos: {
-            returning: [{ __typename: "todos", id: 1, name, complete: true }],
+            returning: [{__typename: 'todos', id: 1, name, complete: true}],
           },
         },
       },
     },
-  ];
-  const { findByText, getByText } = render(
+  ]
+  const {findByText, getByText} = render(
     <MockedProvider mocks={mocks}>
       <Todos navigation={navigation} />
-    </MockedProvider>
-  );
+    </MockedProvider>,
+  )
 
-  const todo = await findByText(name);
-  expect(todo).toBeTruthy();
+  const todo = await findByText(name)
+  expect(todo).toBeTruthy()
 
   await act(async () => {
-    fireEvent.press(todo);
-  });
-  expect(getByText(name)).toHaveStyle({ textDecorationLine: "line-through" });
-});
+    fireEvent.press(todo)
+  })
+  expect(getByText(name)).toHaveStyle({textDecorationLine: 'line-through'})
+})
 
-it("deletes a todo", async () => {
-  const name = "This test";
+it('deletes a todo', async () => {
+  const name = 'This test'
   const mocks = [
     {
       request: {
@@ -163,31 +163,31 @@ it("deletes a todo", async () => {
       },
       result: {
         data: {
-          todos: [{ __typename: "todos", id: 1, name, complete: false }],
+          todos: [{__typename: 'todos', id: 1, name, complete: false}],
         },
       },
     },
     {
       request: {
         query: DeleteTodoDocument,
-        variables: { id: 1 },
+        variables: {id: 1},
       },
       result: {
-        data: { delete_todos: { returning: [{ __typename: "todos", id: 1 }] } },
+        data: {delete_todos: {returning: [{__typename: 'todos', id: 1}]}},
       },
     },
-  ];
-  const { findByA11yLabel, queryByText } = render(
+  ]
+  const {findByA11yLabel, queryByText} = render(
     <MockedProvider mocks={mocks}>
       <Todos navigation={navigation} />
-    </MockedProvider>
-  );
+    </MockedProvider>,
+  )
 
-  const button = await findByA11yLabel(/delete/i);
-  expect(button).toBeTruthy();
+  const button = await findByA11yLabel(/delete/i)
+  expect(button).toBeTruthy()
 
   await act(async () => {
-    fireEvent.press(button);
-  });
-  expect(queryByText(name)).toBeNull();
-});
+    fireEvent.press(button)
+  })
+  expect(queryByText(name)).toBeNull()
+})

@@ -1,4 +1,4 @@
-import { useAuth0 } from "@auth0/auth0-react";
+import {useAuth0} from '@auth0/auth0-react'
 import {
   Divider,
   Drawer,
@@ -7,27 +7,27 @@ import {
   ListItemIcon,
   ListItemText,
   makeStyles,
-} from "@material-ui/core";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import HomeIcon from "@material-ui/icons/Home";
-import InfoIcon from "@material-ui/icons/Info";
-import React from "react";
-import { Link as RouterLink } from "react-router-dom";
+} from '@material-ui/core'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import HomeIcon from '@material-ui/icons/Home'
+import InfoIcon from '@material-ui/icons/Info'
+import React from 'react'
+import {Link as RouterLink} from 'react-router-dom'
 
 const useStyles = makeStyles({
   list: {
     width: 240,
   },
-});
+})
 
 interface Props {
-  isDrawerOpen: boolean;
-  closeDrawer: () => void;
+  isDrawerOpen: boolean
+  closeDrawer: () => void
 }
 
-export default function Sidebar({ isDrawerOpen, closeDrawer }: Props) {
-  const { logout } = useAuth0();
-  const classes = useStyles();
+export default function Sidebar({isDrawerOpen, closeDrawer}: Props) {
+  const {logout} = useAuth0()
+  const classes = useStyles()
   return (
     <Drawer anchor="left" open={isDrawerOpen} onClose={closeDrawer}>
       <List className={classes.list} onClick={closeDrawer}>
@@ -52,5 +52,5 @@ export default function Sidebar({ isDrawerOpen, closeDrawer }: Props) {
         </ListItem>
       </List>
     </Drawer>
-  );
+  )
 }

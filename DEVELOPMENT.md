@@ -15,7 +15,8 @@ _Docker runs the Postgres DB._
 
 ## 2. Setup Expo
 
-_Expo simplifies mobile development by handling Auth redirects and removing XCode and Android studio dependencies._
+_Expo simplifies mobile development by handling Auth redirects and removing
+XCode and Android studio dependencies._
 
 If you're new to Expo, register (it's free) by running:
 
@@ -31,7 +32,9 @@ yarn expo login
 
 ## 3. Signup for Auth0
 
-[Signup](https://auth0.com/signup) and create an Auth0 tenant. Change the default tenant name (ex. "development-my-full-stack") to make it readable. Auth0 is free for up to 7k users.
+[Signup](https://auth0.com/signup) and create an Auth0 tenant. Change the
+default tenant name (ex. "development-my-full-stack") to make it readable. Auth0
+is free for up to 7k users.
 
 **Save your tenant domain for steps below**
 
@@ -39,7 +42,8 @@ yarn expo login
 
 ## 4. Create an Auth0 rule
 
-_This Auth0 rule adds the required [custom JWT claims for Hasura auth](https://hasura.io/docs/1.0/graphql/core/auth/authentication/jwt.html)._
+_This Auth0 rule adds the required
+[custom JWT claims for Hasura auth](https://hasura.io/docs/1.0/graphql/core/auth/authentication/jwt.html)._
 
 - Rules > CREATE RULE
 
@@ -54,13 +58,13 @@ _This Auth0 rule adds the required [custom JWT claims for Hasura auth](https://h
 
 ```js
 function hasuraAccessToken(user, context, callback) {
-  const namespace = "https://hasura.io/jwt/claims";
+  const namespace = 'https://hasura.io/jwt/claims'
   context.accessToken[namespace] = {
-    "x-hasura-default-role": "user",
-    "x-hasura-allowed-roles": ["user"],
-    "x-hasura-user-id": user.user_id,
-  };
-  callback(undefined, user, context);
+    'x-hasura-default-role': 'user',
+    'x-hasura-allowed-roles': ['user'],
+    'x-hasura-user-id': user.user_id,
+  }
+  callback(undefined, user, context)
 }
 ```
 
@@ -108,11 +112,13 @@ _This stores the auth configuration for web._
 <img alt="Auth0 Single Page Web App" src="https://create-full-stack.com/img/readme/auth0_spa.png" width="512"/>
 
 - Click "Settings"
-- Set "Allowed Callback URLs", "Allowed Logout URLs", and "Allowed Web Origins" to "http://localhost:3000"
+- Set "Allowed Callback URLs", "Allowed Logout URLs", and "Allowed Web Origins"
+  to "http://localhost:3000"
 
 <img alt="Auth0 Single Page Web App URLs" src="https://create-full-stack.com/img/readme/auth0_spa_urls.png" width="512"/>
 
-In `packages/web/.env.development` fill in the fields from the server API you created above and your Single Page Web Application's "Settings" page.
+In `packages/web/.env.development` fill in the fields from the server API you
+created above and your Single Page Web Application's "Settings" page.
 
 <img alt="Auth0 Single Page Web App URLs" src="https://create-full-stack.com/img/readme/auth0_spa_settings.png" width="512"/>
 
@@ -136,9 +142,11 @@ _This stores the auth configuration for mobile._
 <img alt="Auth0 Native" src="https://create-full-stack.com/img/readme/auth0_native.png" width="512"/>
 
 - Click "Settings"
-- Set "Allowed Callback URLs" to "https://auth.expo.io/@[YOUR EXPO USERNAME]/[YOUR EXPO APP SLUG]"
+- Set "Allowed Callback URLs" to "https://auth.expo.io/@[YOUR EXPO
+  USERNAME]/[YOUR EXPO APP SLUG]"
   - Get YOUR EXPO USERNAME by running `expo whoami`
-  - Get YOUR EXPO APP SLUG from [`packages/mobile/app.json`](packages/mobile/app.json) `"slug"`
+  - Get YOUR EXPO APP SLUG from
+    [`packages/mobile/app.json`](packages/mobile/app.json) `"slug"`
 
 <img alt="Auth0 Native Application URLs" src="https://create-full-stack.com/img/readme/auth0_native_urls.png" width="512"/>
 
@@ -146,7 +154,8 @@ _This stores the auth configuration for mobile._
 
 <img alt="Auth0 Native Refresh Token" src="https://create-full-stack.com/img/readme/auth0_native_refresh_token.png" width="512"/>
 
-In `packages/mobile/.env.development` fill in the fields from the server API you created above and your Native Application's "Settings" page.
+In `packages/mobile/.env.development` fill in the fields from the server API you
+created above and your Native Application's "Settings" page.
 
 <img alt="Auth0 Native Application Settings" src="https://create-full-stack.com/img/readme/auth0_native_settings.png" width="512"/>
 
@@ -158,7 +167,9 @@ AUTH0_CLIENT_ID=[YOUR AUTH0 NATIVE APPLICATION CLIENT ID]
 
 ## 8. Switch Universal Login to "New"
 
-_It's recommended you use the "New Universal Login Experience" which stores user credentials on page refresh. This is also helpful for developing so you don't need to re-authenticate to view changes you make._
+_It's recommended you use the "New Universal Login Experience" which stores user
+credentials on page refresh. This is also helpful for developing so you don't
+need to re-authenticate to view changes you make._
 
 - Navigate to "Universal Login"
 - Switch from "Classic" to "New"
@@ -178,7 +189,8 @@ yarn start
 URLs available:
 
 - web: [http://localhost:3000](http://localhost:3000)
-  - **This redirects to your [Auth0 login page](https://auth0.com/docs/universal-login)**
+  - **This redirects to your
+    [Auth0 login page](https://auth0.com/docs/universal-login)**
 - mobile (expo devtools): [http://localhost:19002](http://localhost:19002)
 - backend: [http://localhost:8080/v1/graphql](http://localhost:8080/v1/graphql)
   - **API requires authorization to access**
@@ -192,9 +204,13 @@ cd hasura/
 yarn hasura console
 ```
 
-_Learn more about Hasura from their [docs](https://hasura.io/docs/1.0/graphql/core/index.html)._
+_Learn more about Hasura from their
+[docs](https://hasura.io/docs/1.0/graphql/core/index.html)._
 
 ## 11. What's next
 
-- Follow the [Hasura tutorial](https://create-full-stack.com/docs/tutorial_hasura) to update your full stack
-- Check out [available scripts](https://create-full-stack.com/docs/available_scripts)
+- Follow the
+  [Hasura tutorial](https://create-full-stack.com/docs/tutorial_hasura) to
+  update your full stack
+- Check out
+  [available scripts](https://create-full-stack.com/docs/available_scripts)

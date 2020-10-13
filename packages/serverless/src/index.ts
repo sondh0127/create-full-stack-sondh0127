@@ -1,32 +1,32 @@
-import { ApolloServer } from "apollo-server-express";
-import cors from "cors";
-import express from "express";
+import {ApolloServer} from 'apollo-server-express'
+import cors from 'cors'
+import express from 'express'
 
 // import jwt from "express-jwt";
 // import jwksRsa from "jwks-rsa";
-import getResolvers, { DecodedJwt } from "./getResolvers";
-import typeDefs from "./graphql/schema";
+import getResolvers, {DecodedJwt} from './getResolvers'
+import typeDefs from './graphql/schema'
 
-require("cfs-dotenv").config();
+require('cfs-dotenv').config()
 
 interface Request {
-  req: { user: DecodedJwt };
+  req: {user: DecodedJwt}
 }
 
-const origin = ["http://localhost:3000"];
+const origin = ['http://localhost:3000']
 if (process.env.CORS_ORIGIN) {
-  origin.push(process.env.CORS_ORIGIN);
+  origin.push(process.env.CORS_ORIGIN)
 }
 
 async function run() {
-  const resolvers = getResolvers();
-  const app = express();
+  const resolvers = getResolvers()
+  const app = express()
   app.use(
     cors({
       origin,
       credentials: true,
-    })
-  );
+    }),
+  )
 
   // app.use(
   //   jwt({
@@ -46,17 +46,17 @@ async function run() {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }: Request) => {
-      const user = req.user || undefined;
-      return { user };
+    context: ({req}: Request) => {
+      const user = req.user || undefined
+      return {user}
     },
-  });
-  server.applyMiddleware({ app });
+  })
+  server.applyMiddleware({app})
 
-  const port = process.env.PORT || 4000;
-  await app.listen(port);
+  const port = process.env.PORT || 4000
+  await app.listen(port)
   // eslint-disable-next-line no-console
-  console.log(`🚀  Server ready at http://localhost:${port}/graphql`);
+  console.log(`🚀  Server ready at http://localhost:${port}/graphql`)
 }
 
-run();
+run()

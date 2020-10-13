@@ -1,16 +1,16 @@
-import { MockedProvider } from "@apollo/client/testing";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import {MockedProvider} from '@apollo/client/testing'
+import {fireEvent, render, waitFor} from '@testing-library/react'
 import {
   CreateTodoDocument,
   DeleteTodoDocument,
   TodosDocument,
   UpdateTodoDocument,
-} from "common";
-import React from "react";
+} from 'common'
+import React from 'react'
 
-import Todos from "./Todos";
+import Todos from './Todos'
 
-it("renders an input", async () => {
+it('renders an input', async () => {
   const mocks = [
     {
       request: {
@@ -22,19 +22,19 @@ it("renders an input", async () => {
         },
       },
     },
-  ];
-  const { findByPlaceholderText } = render(
+  ]
+  const {findByPlaceholderText} = render(
     <MockedProvider mocks={mocks}>
       <Todos />
-    </MockedProvider>
-  );
+    </MockedProvider>,
+  )
 
-  const input = await findByPlaceholderText("What needs to be done?");
-  expect(input).toBeInTheDocument();
-});
+  const input = await findByPlaceholderText('What needs to be done?')
+  expect(input).toBeInTheDocument()
+})
 
-it("renders a todo", async () => {
-  const name = "This test";
+it('renders a todo', async () => {
+  const name = 'This test'
   const mocks = [
     {
       request: {
@@ -42,23 +42,23 @@ it("renders a todo", async () => {
       },
       result: {
         data: {
-          todos: [{ __typename: "todos", id: 1, name, complete: false }],
+          todos: [{__typename: 'todos', id: 1, name, complete: false}],
         },
       },
     },
-  ];
-  const { findByText } = render(
+  ]
+  const {findByText} = render(
     <MockedProvider mocks={mocks}>
       <Todos />
-    </MockedProvider>
-  );
+    </MockedProvider>,
+  )
 
-  const todo = await findByText(name);
-  expect(todo).toBeInTheDocument();
-});
+  const todo = await findByText(name)
+  expect(todo).toBeInTheDocument()
+})
 
-it("creates a todo", async () => {
-  const name = "This test";
+it('creates a todo', async () => {
+  const name = 'This test'
   const mocks = [
     {
       request: {
@@ -73,40 +73,40 @@ it("creates a todo", async () => {
     {
       request: {
         query: CreateTodoDocument,
-        variables: { name },
+        variables: {name},
       },
       result: {
         data: {
           insert_todos: {
-            returning: { __typename: "todos", id: 1, name, complete: false },
+            returning: {__typename: 'todos', id: 1, name, complete: false},
           },
         },
       },
     },
-  ];
-  const { queryByText, findByText, getByPlaceholderText } = render(
+  ]
+  const {queryByText, findByText, getByPlaceholderText} = render(
     <MockedProvider mocks={mocks}>
       <Todos />
-    </MockedProvider>
-  );
+    </MockedProvider>,
+  )
 
-  expect(queryByText(name)).toBeNull();
+  expect(queryByText(name)).toBeNull()
   const input = getByPlaceholderText(
-    "What needs to be done?"
-  ) as HTMLInputElement;
-  expect(input).toBeInTheDocument();
-  fireEvent.change(input, { target: { value: name } });
+    'What needs to be done?',
+  ) as HTMLInputElement
+  expect(input).toBeInTheDocument()
+  fireEvent.change(input, {target: {value: name}})
 
-  await waitFor(() => expect(input.value).toBe(name));
-  fireEvent.keyPress(input, { key: "Enter", code: 13, charCode: 13 });
+  await waitFor(() => expect(input.value).toBe(name))
+  fireEvent.keyPress(input, {key: 'Enter', code: 13, charCode: 13})
 
-  const todo = await findByText(name);
-  expect(input.value).toBe("");
-  expect(todo).toBeInTheDocument();
-});
+  const todo = await findByText(name)
+  expect(input.value).toBe('')
+  expect(todo).toBeInTheDocument()
+})
 
-it("updates a todo", async () => {
-  const name = "This test";
+it('updates a todo', async () => {
+  const name = 'This test'
   const mocks = [
     {
       request: {
@@ -114,41 +114,41 @@ it("updates a todo", async () => {
       },
       result: {
         data: {
-          todos: [{ __typename: "todos", id: 1, name, complete: false }],
+          todos: [{__typename: 'todos', id: 1, name, complete: false}],
         },
       },
     },
     {
       request: {
         query: UpdateTodoDocument,
-        variables: { id: 1, complete: true },
+        variables: {id: 1, complete: true},
       },
       result: {
         data: {
           update_todos: {
-            returning: [{ __typename: "todos", id: 1, name, complete: true }],
+            returning: [{__typename: 'todos', id: 1, name, complete: true}],
           },
         },
       },
     },
-  ];
-  const { findByText } = render(
+  ]
+  const {findByText} = render(
     <MockedProvider mocks={mocks}>
       <Todos />
-    </MockedProvider>
-  );
+    </MockedProvider>,
+  )
 
-  const todo = await findByText(name);
-  expect(todo).toBeInTheDocument();
-  fireEvent.click(todo);
+  const todo = await findByText(name)
+  expect(todo).toBeInTheDocument()
+  fireEvent.click(todo)
 
   await waitFor(() =>
-    expect(todo).toHaveStyle("text-decoration: line-through;")
-  );
-});
+    expect(todo).toHaveStyle('text-decoration: line-through;'),
+  )
+})
 
-it("deletes a todo", async () => {
-  const name = "This test";
+it('deletes a todo', async () => {
+  const name = 'This test'
   const mocks = [
     {
       request: {
@@ -156,29 +156,29 @@ it("deletes a todo", async () => {
       },
       result: {
         data: {
-          todos: [{ __typename: "todos", id: 1, name, complete: false }],
+          todos: [{__typename: 'todos', id: 1, name, complete: false}],
         },
       },
     },
     {
       request: {
         query: DeleteTodoDocument,
-        variables: { id: 1 },
+        variables: {id: 1},
       },
       result: {
-        data: { delete_todos: { returning: [{ __typename: "todos", id: 1 }] } },
+        data: {delete_todos: {returning: [{__typename: 'todos', id: 1}]}},
       },
     },
-  ];
-  const { findByLabelText, queryByText } = render(
+  ]
+  const {findByLabelText, queryByText} = render(
     <MockedProvider mocks={mocks}>
       <Todos />
-    </MockedProvider>
-  );
+    </MockedProvider>,
+  )
 
-  const button = await findByLabelText(/delete/i);
-  expect(button).toBeInTheDocument();
-  fireEvent.click(button);
+  const button = await findByLabelText(/delete/i)
+  expect(button).toBeInTheDocument()
+  fireEvent.click(button)
 
-  await waitFor(() => expect(queryByText(name)).toBeNull());
-});
+  await waitFor(() => expect(queryByText(name)).toBeNull())
+})
